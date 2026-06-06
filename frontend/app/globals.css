@@ -1,0 +1,177 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap');
+
+@layer base {
+  :root {
+    --color-bg: #faf8f5;
+    --color-surface: #ffffff;
+    --color-border: #efede7;
+    --color-border-light: #f5f2ed;
+    --color-text: #282219;
+    --color-text-secondary: #847560;
+    --color-text-tertiary: #b4a892;
+    --color-brand: #059669;
+    --color-brand-light: #10b981;
+    --color-brand-subtle: #ecfdf5;
+    --radius-sm: 0.5rem;
+    --radius-md: 0.75rem;
+    --radius-lg: 1rem;
+    --radius-xl: 1.25rem;
+    --radius-2xl: 1.5rem;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    color: var(--color-text);
+    background: var(--color-bg);
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11", "salt";
+  }
+
+  ::selection {
+    background-color: var(--color-brand);
+    color: white;
+  }
+
+  /* Focus ring */
+  *:focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #d9d2c6;
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #b8ad9b;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-white rounded-2xl border border-[var(--color-border)] shadow-card transition-all duration-300;
+  }
+
+  .card:hover {
+    @apply shadow-card-hover;
+  }
+
+  .card-highlight {
+    @apply card border-l-4 border-l-brand-500;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-2.5 bg-white border border-[var(--color-border)] rounded-xl text-sm
+           placeholder:text-[var(--color-text-tertiary)] text-[var(--color-text)]
+           transition-all duration-200 shadow-input
+           focus:outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-500/15;
+  }
+
+  .input-label {
+    @apply block text-xs font-semibold text-[var(--color-text-secondary)] uppercase tracking-wider mb-1.5;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 
+           bg-gradient-to-b from-brand-500 to-brand-600 
+           text-white text-sm font-semibold rounded-xl
+           shadow-[0_1px_2px_rgba(5,150,105,0.3)]
+           hover:from-brand-600 hover:to-brand-700
+           hover:shadow-[0_4px_12px_rgba(5,150,105,0.25)]
+           active:from-brand-700 active:to-brand-800
+           disabled:opacity-50 disabled:cursor-not-allowed
+           transition-all duration-200 ease-out;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5
+           bg-white text-[var(--color-text-secondary)] text-sm font-semibold rounded-xl
+           border border-[var(--color-border)]
+           hover:bg-[var(--color-border-light)] hover:border-[var(--color-border)] hover:text-[var(--color-text)]
+           active:bg-[var(--color-border)]
+           disabled:opacity-50 disabled:cursor-not-allowed
+           transition-all duration-200 ease-out;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-3 py-2
+           text-sm font-medium text-[var(--color-text-secondary)]
+           hover:bg-[var(--color-border-light)] hover:text-[var(--color-text)]
+           rounded-xl transition-all duration-200 ease-out;
+  }
+
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .badge-green {
+    @apply badge bg-emerald-50 text-emerald-700;
+  }
+
+  .badge-amber {
+    @apply badge bg-amber-50 text-amber-700;
+  }
+
+  .badge-red {
+    @apply badge bg-red-50 text-red-600;
+  }
+
+  .badge-blue {
+    @apply badge bg-brand-50 text-brand-700;
+  }
+
+  .section-heading {
+    @apply text-lg font-bold text-[var(--color-text)] tracking-tight;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.4) 50%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s linear infinite;
+  }
+}
+
+@layer utilities {
+  .bg-dot-pattern {
+    background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='1.5' fill='%2310b981' fill-opacity='0.08'/%3E%3C/svg%3E");
+  }
+
+  .bg-grid-pattern {
+    background-image: linear-gradient(to right, var(--color-border) 1px, transparent 1px),
+                      linear-gradient(to bottom, var(--color-border) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+}
