@@ -7,8 +7,6 @@ from app.config import UPLOAD_DIR
 from app.routers import patients, appointments, medical_reports, ai_assistant, admin, auth
 from app.seed import seed_default_admin
 
-import os
-
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
@@ -17,9 +15,11 @@ app = FastAPI(
     version="1.0.0",
 )
 
+ALLOWED_ORIGINS = os.getenv("CORS_ORIGINS", "http://localhost:3000,http://localhost:3001").split(",")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

@@ -1,9 +1,11 @@
 import json
 import re
 from openai import OpenAI
-from app.config import OPENAI_API_KEY
+from app.config import GROQ_API_KEY, GROQ_BASE_URL, GROQ_MODEL, OPENAI_API_KEY
 
-client = OpenAI(api_key=OPENAI_API_KEY)
+api_key = GROQ_API_KEY or OPENAI_API_KEY
+base_url = GROQ_BASE_URL if GROQ_API_KEY else None
+client = OpenAI(api_key=api_key, base_url=base_url) if GROQ_API_KEY else OpenAI(api_key=OPENAI_API_KEY)
 
 SYMPTOM_SYSTEM_PROMPT = """You are a medical assistant for Haq Homeo Clinic (Dr. Halima Haq, homeopathic practitioner).
 
@@ -38,8 +40,16 @@ IMPORTANT: Do NOT diagnose. Only summarize what the report says.
 Return JSON with keys: "summary", "key_findings", "patient_explanation"."""
 
 
+def _model() -> str:
+    return GROQ_MODEL if GROQ_API_KEY else "gpt-4o-mini"
+
+
+def _has_api_key() -> bool:
+    return bool(GROQ_API_KEY or OPENAI_API_KEY)
+
+
 def process_chat_message(message: str, context: dict | None = None) -> dict:
-    if not OPENAI_API_KEY:
+    if not _has_api_key():
         return _fallback_chat_response(message)
 
     user_context = ""
@@ -48,7 +58,7 @@ def process_chat_message(message: str, context: dict | None = None) -> dict:
 
     try:
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model=_model(),
             messages=[
                 {"role": "system", "content": SYMPTOM_SYSTEM_PROMPT},
                 {"role": "user", "content": f"{user_context}\n\nPatient message: {message}"},
@@ -62,7 +72,7 @@ def process_chat_message(message: str, context: dict | None = None) -> dict:
 
 
 def analyze_medical_report(extracted_text: str) -> dict:
-    if not OPENAI_API_KEY or not extracted_text.strip():
+    if not _has_api_key() or not extracted_text.strip():
         return {
             "summary": "Report text not available for analysis.",
             "key_findings": "N/A",
@@ -71,7 +81,7 @@ def analyze_medical_report(extracted_text: str) -> dict:
 
     try:
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model=_model(),
             messages=[
                 {"role": "system", "content": REPORT_SYSTEM_PROMPT},
                 {"role": "user", "content": f"Report text:\n{extracted_text}"},

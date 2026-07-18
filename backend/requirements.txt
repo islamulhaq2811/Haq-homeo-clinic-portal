@@ -11,3 +11,4 @@ Pillow>=12.0.0
 python-multipart>=0.0.12
 pydantic>=2.9.0
 pymysql>=1.1.0
+psycopg2-binary>=2.9.0
